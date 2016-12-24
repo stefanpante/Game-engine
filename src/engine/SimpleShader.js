@@ -1,25 +1,27 @@
-import VertexBuffer from './VertexBuffer';
-
+import VertexBuffer from './Core/VertexBuffer';
+import Core from './Core/Core';
 class SimpleShader {
   constructor(vertexShaderSrc, fragmentShaderSrc, gl) {
-    this.gl = gl;
 
-    const vertexShader = this.compileShader(vertexShaderSrc, this.gl.VERTEX_SHADER, gl);
-    const fragmentShader = this.compileShader(fragmentShaderSrc, this.gl.FRAGMENT_SHADER, gl);
+    const vertexShader = this.compileShader(vertexShaderSrc, gl.VERTEX_SHADER, gl);
+    const fragmentShader = this.compileShader(fragmentShaderSrc, gl.FRAGMENT_SHADER, gl);
 
-    this.compiledShader = this.gl.createProgram();
-    this.gl.attachShader(this.compiledShader, vertexShader);
-    this.gl.attachShader(this.compiledShader, fragmentShader);
+    this.compiledShader = gl.createProgram();
+    gl.attachShader(this.compiledShader, vertexShader);
+    gl.attachShader(this.compiledShader, fragmentShader);
 
-    this.gl.linkProgram(this.compiledShader);
+    gl.linkProgram(this.compiledShader);
 
-    if (!gl.getProgramParameter(this.compiledShader, this.gl.LINK_STATUS)) {
+    if (!gl.getProgramParameter(this.compiledShader, gl.LINK_STATUS)) {
       return console.log('error linking shader');
     }
 
-    this.shaderVertexPositionAttribute = this.gl.getAttribLocation(this.compiledShader, 'aSquareVertexPosition');
-    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, VertexBuffer.getGLVertexRef());
-    this.gl.vertexAttribPointer(this.shaderVertexPositionAttribute, 3, this.gl.FLOAT, false, 0, 0);
+    this.shaderVertexPositionAttribute = gl.getAttribLocation(this.compiledShader, 'squareVertexPosition');
+    gl.bindBuffer(gl.ARRAY_BUFFER, VertexBuffer.getGLVertexRef());
+    gl.vertexAttribPointer(this.shaderVertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
+
+    this.pixelColor = gl.getUniformLocation(this.compiledShader, 'pixelColor');
+    this.modelTransform = gl.getUniformLocation(this.compiledShader, 'modelTransform');
   }
 
   compileShader(shaderSrc, shaderType, gl) {
@@ -34,13 +36,20 @@ class SimpleShader {
     return compiledShader;
   }
 
-  activateShader() {
-    this.gl.useProgram(this.compiledShader);
-    this.gl.enableVertexAttribArray(this.shaderVertexPositionAttribute);
+  activateShader(pixelColor) {
+    const gl = Core.getGL();
+    gl.useProgram(this.compiledShader);
+    gl.enableVertexAttribArray(this.shaderVertexPositionAttribute);
+    gl.uniform4fv(this.pixelColor, pixelColor);
   }
 
   getShader() {
     return this.compiledShader;
+  }
+
+  loadObjectTransform(modelTransform) {
+    const gl = Core.getGL();
+    gl.uniformMatrix4fv(this.modelTransform, false, modelTransform);
   }
 }
 
