@@ -65,7 +65,7 @@ mocha.json
 
 # Frontend
 public/vendor
-
+bundle.js
 # Config
 config/apps.local.yml
 config/database.local.yml

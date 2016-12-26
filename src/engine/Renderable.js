@@ -8,10 +8,10 @@ class Renderable {
     this.transform = new Transform();
   }
 
-  draw() {
+  draw(viewPort) {
     const gl = Core.getGL();
 
-    this.shader.activateShader(this.color);
+    this.shader.activateShader(this.color, viewPort);
     this.shader.loadObjectTransform(this.transform.getTransformationMatrix());
 
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);

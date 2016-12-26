@@ -22,6 +22,7 @@ class SimpleShader {
 
     this.pixelColor = gl.getUniformLocation(this.compiledShader, 'pixelColor');
     this.modelTransform = gl.getUniformLocation(this.compiledShader, 'modelTransform');
+    this.viewProjTransform = gl.getUniformLocation(this.compiledShader, 'viewProjTransform');
   }
 
   compileShader(shaderSrc, shaderType, gl) {
@@ -36,9 +37,10 @@ class SimpleShader {
     return compiledShader;
   }
 
-  activateShader(pixelColor) {
+  activateShader(pixelColor, viewPort) {
     const gl = Core.getGL();
     gl.useProgram(this.compiledShader);
+    gl.uniformMatrix4fv(this.viewProjTransform, false, viewPort);
     gl.enableVertexAttribArray(this.shaderVertexPositionAttribute);
     gl.uniform4fv(this.pixelColor, pixelColor);
   }
