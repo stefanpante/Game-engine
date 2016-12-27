@@ -20,6 +20,11 @@ class Transform {
     this.position = vec3.fromValues(x, y, 0);
   }
 
+  translateXPosition(delta) {
+    const x = this.position[0];
+    this.setXPosition(x + delta);
+  }
+
   getYPosition() {
     return this.position[1];
   }
@@ -31,6 +36,15 @@ class Transform {
 
   getPosition() {
     return this.position;
+  }
+
+
+  getWidth() {
+    return this.scale[0];
+  }
+
+  getHeight() {
+    return this.scale[1];
   }
 
   setWidth(width) {
@@ -48,11 +62,20 @@ class Transform {
     this.setHeight(height);
   }
 
+  increaseSize(increase) {
+    const scalar = (1 + increase);
+    this.setSize(this.scale[0] * scalar, this.scale[1] * scalar);
+  }
+
   setRotation(rotation) {
     this.rotation = rotation;
     while (this.rotation > 2 * Math.PI) {
       this.rotation -= (2 * Math.PI);
     }
+  }
+
+  addRotation(delta) {
+    this.setRotation(this.rotation + delta);
   }
 
   getTransformationMatrix() {
