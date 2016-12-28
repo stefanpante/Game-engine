@@ -1,5 +1,5 @@
 import VertexBuffer from './VertexBuffer';
-
+import Input from './Input';
 let singleton;
 
 class Core {
@@ -10,8 +10,12 @@ class Core {
     if (!this.gl) {
       console.log('WebGL is not supported');
     }
+  }
 
+  initialize(canvasId) {
+    this.initializeWebGL(canvasId);
     VertexBuffer.initialize(this.gl);
+
   }
 
   getGL() {
@@ -25,7 +29,6 @@ class Core {
 }
 
 if (!singleton) {
-  console.log('new singleton');
   singleton = new Core();
 }
 

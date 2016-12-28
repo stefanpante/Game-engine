@@ -1,3 +1,4 @@
+import Input from './Input';
 
 class GameLoop {
   constructor() {
@@ -27,6 +28,7 @@ class GameLoop {
       this.lagTime += this.elapsedTime;
 
       while ((this.lagTime >= this.millisPerFrame) && this.active) {
+        Input.update();
         this.game.update();
         this.lagTime -= this.millisPerFrame;
       }

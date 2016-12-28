@@ -5,10 +5,12 @@ import FragmentShader from './glsl/FragmentShader.glsl';
 import VertexShader from './glsl/VertexShader.glsl';
 import Renderable from './engine/Renderable';
 import GameLoop from './engine/Core/GameLoop';
-import { vec2, mat4 } from 'gl-matrix';
+import Input from './engine/Core/Input';
+import keys from './engine/Core/keys';
+import { vec2 } from 'gl-matrix';
 class Game {
   constructor(canvasID) {
-    Core.initializeWebGL(canvasID);
+    Core.initialize(canvasID);
     this.camera = new Camera(vec2.fromValues(20, 60), 20, [20, 40, 600, 300]);
     this.camera.setBackgroundColor([0.8, 0.8, 0.8, 1]);
     this.colorShader = new SimpleShader(VertexShader, FragmentShader, Core.getGL());
@@ -37,19 +39,24 @@ class Game {
     const whiteTransform = this.whiteSquare.getTransform();
     const deltaX = 0.05;
 
+    if (Input.isKeyPressed(keys.RIGHT)) {
+      whiteTransform.translateXPosition(deltaX);
+      whiteTransform.addRotation(Math.PI / 180);
+    }
+
     if (whiteTransform.getXPosition() > 30) {
       whiteTransform.setPosition(10, 60);
     }
 
-    whiteTransform.translateXPosition(deltaX);
-    whiteTransform.addRotation(Math.PI / 180);
-
     const redTransform = this.redSquare.getTransform();
+    if (Input.isKeyPressed(keys.DOWN)) {
+      redTransform.increaseSize(0.05);
+    }
+
     if (redTransform.getWidth() > 5) {
       redTransform.setSize(2, 2);
     }
 
-    redTransform.increaseSize(0.05);
   }
 
   draw() {
