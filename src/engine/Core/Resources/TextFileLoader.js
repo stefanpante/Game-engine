@@ -1,13 +1,16 @@
 import ResourceMap from './ResourceMap';
 
+const FILE_TYPES = Object.freeze({
+  XML_FILE: 0,
+  TEXT_FILE: 1
+});
 
 class TextFileLoader {
-  constructor() {
-    this.fileTypes = Object.freeze({
-      XML_FILE: 0,
-      TEXT_FILE: 1
-    });
+
+  get fileTypes() {
+    return FILE_TYPES;
   }
+
   loadTextFile(fileName, fileType, callback) {
 
     if (ResourceMap.isAssetLoaded(fileName)) {
@@ -33,6 +36,10 @@ class TextFileLoader {
           return callback(null, fileName);
         }
       });
+  }
+
+  unloadTextFile(fileName) {
+    ResourceMap.unloadAsset(fileName);
   }
 }
 
