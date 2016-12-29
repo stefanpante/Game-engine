@@ -1,9 +1,6 @@
 import Core from './engine/Core/Core';
-import Camera from './engine/Camera';
-import SimpleShader from './engine/SimpleShader';
-import FragmentShader from './glsl/FragmentShader.glsl';
-import VertexShader from './glsl/VertexShader.glsl';
-import Renderable from './engine/Renderable';
+import TextFileLoader from './engine/Core/Resources/TextFileLoader';
+import SceneParser from './util/SceneParser';
 import GameLoop from './engine/Core/GameLoop';
 import Input from './engine/Core/Input';
 import keys from './engine/Core/keys';
@@ -11,32 +8,22 @@ import { vec2 } from 'gl-matrix';
 class Game {
   constructor(canvasID) {
     Core.initialize(canvasID);
-    this.camera = new Camera(vec2.fromValues(20, 60), 20, [20, 40, 600, 300]);
-    this.camera.setBackgroundColor([0.8, 0.8, 0.8, 1]);
-    this.colorShader = new SimpleShader(VertexShader, FragmentShader, Core.getGL());
+    this.sceneFile = 'assets/scene.json';
+  }
 
-    this.whiteSquare = new Renderable(this.colorShader);
-    this.whiteSquare.setColor([1, 1, 1, 1]);
+  loadScene() {
+    TextFileLoader.loadTextFile(this.sceneFile, TextFileLoader.fileTypes.JSON);
+  }
 
-    this.redSquare = new Renderable(this.colorShader);
-    this.redSquare.setColor([1, 0, 0, 1]);
+  initialize() {
+    const sceneParser = new SceneParser(this.sceneFile);
 
-    const whiteTransform = this.whiteSquare.getTransform();
-    whiteTransform.setPosition(20, 60);
-    whiteTransform.setRotation(0.2);
-    whiteTransform.setSize(5, 5);
-
-    const redTransform = this.redSquare.getTransform();
-    redTransform.setPosition(20, 60);
-    redTransform.setSize(2, 2);
-
-    const loop = new GameLoop();
-
-    loop.start(this);
+    this.camera = sceneParser.parseCamera();
+    this.squares = sceneParser.parseSquares();
   }
 
   update() {
-    const whiteTransform = this.whiteSquare.getTransform();
+    const whiteTransform = this.squares[0].getTransform();
     const deltaX = 0.05;
 
     if (Input.isKeyPressed(keys.RIGHT)) {
@@ -48,7 +35,7 @@ class Game {
       whiteTransform.setPosition(10, 60);
     }
 
-    const redTransform = this.redSquare.getTransform();
+    const redTransform = this.squares[1].getTransform();
     if (Input.isKeyPressed(keys.DOWN)) {
       redTransform.increaseSize(0.05);
     }
@@ -64,8 +51,7 @@ class Game {
 
     this.camera.setupViewProjection();
     const vpMatrix = this.camera.getViewportMatrix();
-    this.whiteSquare.draw(vpMatrix);
-    this.redSquare.draw(vpMatrix);
+    this.squares.forEach(square => square.draw(vpMatrix));
   }
 }
 

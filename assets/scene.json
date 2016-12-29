@@ -1,0 +1,26 @@
+{
+  "camera": {
+    "center": {
+      "x": 20,
+      "y": 60
+    },
+    "width": 20,
+    "viewport": [20, 40, 600, 300],
+    "backgroundColor": [0.8, 0.8, 0.8, 1.0]
+  },
+  "squares": [{
+    "x": 20,
+    "y": 20,
+    "width": 5,
+    "height": 5,
+    "rotation": 0.2,
+    "color": [1, 1, 1, 1]
+  }, {
+    "x": 20,
+    "y": 20,
+    "width": 2,
+    "height": 2,
+    "rotation": 0,
+    "color": [1, 0, 0, 1]
+  }]
+}

@@ -2,8 +2,11 @@ import ResourceMap from './ResourceMap';
 
 const FILE_TYPES = Object.freeze({
   XML_FILE: 0,
-  TEXT_FILE: 1
+  TEXT_FILE: 1,
+  JSON: 2
 });
+
+let singleton;
 
 class TextFileLoader {
 
@@ -43,4 +46,8 @@ class TextFileLoader {
   }
 }
 
-export default TextFileLoader;
+if (!singleton) {
+  singleton = new TextFileLoader();
+}
+
+export default singleton;

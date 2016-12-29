@@ -1,8 +1,9 @@
 import VertexBuffer from './Core/VertexBuffer';
 import Core from './Core/Core';
 class SimpleShader {
-  constructor(vertexShaderSrc, fragmentShaderSrc, gl) {
-
+  constructor(vertexShaderSrc, fragmentShaderSrc) {
+    const gl = Core.getGL();
+    console.log(gl);
     const vertexShader = this.compileShader(vertexShaderSrc, gl.VERTEX_SHADER, gl);
     const fragmentShader = this.compileShader(fragmentShaderSrc, gl.FRAGMENT_SHADER, gl);
 
@@ -19,6 +20,12 @@ class SimpleShader {
     this.shaderVertexPositionAttribute = gl.getAttribLocation(this.compiledShader, 'squareVertexPosition');
     gl.bindBuffer(gl.ARRAY_BUFFER, VertexBuffer.getGLVertexRef());
     gl.vertexAttribPointer(this.shaderVertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
+
+    this.loadShaderUniformLocations();
+  }
+
+  loadShaderUniformLocations() {
+    const gl = Core.getGL();
 
     this.pixelColor = gl.getUniformLocation(this.compiledShader, 'pixelColor');
     this.modelTransform = gl.getUniformLocation(this.compiledShader, 'modelTransform');

@@ -16,7 +16,9 @@
     "babel-preset-react": "^6.16.0",
     "es6-promise": "^4.0.5",
     "eslint": "^3.12.2",
+    "exports-loader": "^0.6.3",
     "gl-matrix": "^2.3.2",
+    "imports-loader": "^0.7.0",
     "webpack": "^1.14.0",
     "webpack-glsl-loader": "^1.0.1",
     "whatwg-fetch": "^2.0.1"
