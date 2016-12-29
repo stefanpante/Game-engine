@@ -27,7 +27,7 @@ class SceneParser {
     transform.setPosition(squareJSON.x, squareJSON.y);
     transform.setRotation(squareJSON.rotation);
     transform.setSize(squareJSON.width, squareJSON.height);
-    square.setTransfrom(transform);
+    square.setTransform(transform);
 
     return square;
   }
